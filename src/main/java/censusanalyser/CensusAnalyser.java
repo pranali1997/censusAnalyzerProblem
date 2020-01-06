@@ -13,23 +13,18 @@ import java.util.stream.StreamSupport;
 public class CensusAnalyser {
     public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));){
-            CsvToBeanBuilder<IndiaCensusCSV> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
-            csvToBeanBuilder.withType(IndiaCensusCSV.class);
-            csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
-            CsvToBean<IndiaCensusCSV> csvToBean = csvToBeanBuilder.build();
-            Iterator<IndiaCensusCSV> censusCSVIterator = csvToBean.iterator();;
+            CsvToBean<IndiaCensusCSV> csvToBean = (CsvToBean<IndiaCensusCSV>) getCsvFileIterable(reader,IndiaCensusCSV.class);
+            Iterator<IndiaCensusCSV> censusCSVIterator = csvToBean.iterator();
             Iterable<IndiaCensusCSV> csvIterable=() -> censusCSVIterator;
             int namOfEateries= (int) StreamSupport.stream(csvIterable.spliterator(),false).count();
             return namOfEateries;
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.UNABLE_TO_PARSE);
-        }
-        catch (RuntimeException e){
+        }catch (RuntimeException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.INVALID_DELIMITER);
         }
@@ -37,25 +32,37 @@ public class CensusAnalyser {
 
     public int loadStateCensusData(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));){
-            CsvToBeanBuilder<CSVState> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
-            csvToBeanBuilder.withType(CSVState.class);
-            csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
-            CsvToBean<CSVState> csvToBean = csvToBeanBuilder.build();
-            Iterator<CSVState> censusCSVIterator = csvToBean.iterator();;
+            CsvToBean<CSVState> csvToBean = (CsvToBean<CSVState>) getCsvFileIterable(reader,CSVState.class);
+            Iterator<CSVState> censusCSVIterator = csvToBean.iterator();
             Iterable<CSVState> csvIterable=() -> censusCSVIterator;
             int namOfEateries= (int) StreamSupport.stream(csvIterable.spliterator(),false).count();
             return namOfEateries;
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.UNABLE_TO_PARSE);
-        }
-        catch (RuntimeException e){
+        }catch (RuntimeException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.INVALID_DELIMITER);
         }
     }
+
+    private <E> Iterable<E> getCsvFileIterable(Reader reader,Class CSVClass) throws CensusAnalyserException {
+        try {
+            CsvToBeanBuilder<E> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
+            csvToBeanBuilder.withType(CSVClass);
+            csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
+            return csvToBeanBuilder.build();
+        } catch (IllegalArgumentException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.UNABLE_TO_PARSE);
+        }catch (RuntimeException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.INVALID_DELIMITER);
+        }
+    }
+
+
 }
