@@ -34,4 +34,28 @@ public class CensusAnalyser {
                     CensusAnalyserException.ExceptionType.INVALID_DELIMITER);
         }
     }
+
+    public int loadStateCensusData(String csvFilePath) throws CensusAnalyserException {
+        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));){
+            CsvToBeanBuilder<CSVState> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
+            csvToBeanBuilder.withType(CSVState.class);
+            csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
+            CsvToBean<CSVState> csvToBean = csvToBeanBuilder.build();
+            Iterator<CSVState> censusCSVIterator = csvToBean.iterator();;
+            Iterable<CSVState> csvIterable=() -> censusCSVIterator;
+            int namOfEateries= (int) StreamSupport.stream(csvIterable.spliterator(),false).count();
+            return namOfEateries;
+        } catch (IOException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+        }
+        catch (IllegalArgumentException e){
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.UNABLE_TO_PARSE);
+        }
+        catch (RuntimeException e){
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.INVALID_DELIMITER);
+        }
+    }
 }
