@@ -13,7 +13,7 @@ import java.util.stream.StreamSupport;
 public class CensusAnalyser {
     public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));){
-            CsvToBean<IndiaCensusCSV> csvToBean = (CsvToBean<IndiaCensusCSV>) getCsvFileIterable(reader,IndiaCensusCSV.class);
+            CsvToBean<IndiaCensusCSV> csvToBean =  new OpenCSVBuilder().getCsvFileIterable(reader,IndiaCensusCSV.class);
             Iterator<IndiaCensusCSV> censusCSVIterator = csvToBean.iterator();
             Iterable<IndiaCensusCSV> csvIterable=() -> censusCSVIterator;
             int namOfEateries= (int) StreamSupport.stream(csvIterable.spliterator(),false).count();
@@ -32,7 +32,7 @@ public class CensusAnalyser {
 
     public int loadStateCensusData(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));){
-            CsvToBean<CSVState> csvToBean = (CsvToBean<CSVState>) getCsvFileIterable(reader,CSVState.class);
+            CsvToBean<CSVState> csvToBean = OpenCSVBuilder.getCsvFileIterable(reader,CSVState.class);
             Iterator<CSVState> censusCSVIterator = csvToBean.iterator();
            return getCount(censusCSVIterator);
         } catch (IOException e) {
@@ -52,20 +52,7 @@ public class CensusAnalyser {
         int namOfEateries= (int) StreamSupport.stream(csvIterable.spliterator(),false).count();
         return namOfEateries;
     }
-    private <E> Iterable<E> getCsvFileIterable(Reader reader,Class CSVClass) throws CensusAnalyserException {
-        try {
-            CsvToBeanBuilder<E> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
-            csvToBeanBuilder.withType(CSVClass);
-            csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
-            return csvToBeanBuilder.build();
-        } catch (IllegalArgumentException e) {
-            throw new CensusAnalyserException(e.getMessage(),
-                    CensusAnalyserException.ExceptionType.UNABLE_TO_PARSE);
-        }catch (RuntimeException e) {
-            throw new CensusAnalyserException(e.getMessage(),
-                    CensusAnalyserException.ExceptionType.INVALID_DELIMITER);
-        }
-    }
+
 
 
 }
