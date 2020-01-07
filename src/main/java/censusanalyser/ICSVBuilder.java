@@ -1,10 +1,10 @@
 package censusanalyser;
 
-import com.opencsv.bean.CsvToBean;
 
 import java.io.Reader;
+import java.util.Iterator;
 
-public interface ICSVBuilder {
-    public  <E> CsvToBean<E> getCsvFileIterable(Reader reader, Class CSVClass) throws CensusAnalyserException;
+public interface ICSVBuilder<E> {
+    public Iterator<E> getCsvFileIterable(Reader reader, Class<E> CSVClass) throws CensusAnalyserException, CSVBuilderException;
 }
 
