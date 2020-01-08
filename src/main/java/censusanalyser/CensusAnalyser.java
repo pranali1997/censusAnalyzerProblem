@@ -39,6 +39,7 @@ public class CensusAnalyser {
     public int loadStateCensusData(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));){
             Iterator<CSVState> censusCSVIterator = new OpenCSVBuilder().getCsvFileIterable(reader,CSVState.class);
+            SortingStateCodeCSVFile(csvFilePath);
             return getCount(censusCSVIterator);
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
@@ -86,7 +87,33 @@ public class CensusAnalyser {
             return null;
         }
 
+
+    public List SortingStateCodeCSVFile(String csvFilePath) throws CensusAnalyserException{
+        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath)))
+        {
+            Iterator<CSVState> censusCSVIterator = new OpenCSVBuilder().getCsvFileIterable(reader,CSVState.class);
+            List<CSVState> listStateCSv = new ArrayList<>();
+            while (censusCSVIterator.hasNext()) {
+                listStateCSv.add(censusCSVIterator.next());
+            }
+            Collections.sort(listStateCSv,new ObjectComparatorEx());
+            System.out.println(listStateCSv);
+            return listStateCSv;
+        } catch (IOException e) {
+            //  e.printStackTrace();
+        } catch (CSVBuilderException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.UNABLE_TO_PARSE);
+        }catch (RuntimeException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.INVALID_DELIMITER);
+        }
+        return null;
     }
+
+}
 
 
 

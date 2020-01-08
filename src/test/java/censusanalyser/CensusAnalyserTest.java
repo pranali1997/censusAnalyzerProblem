@@ -160,7 +160,42 @@ public class CensusAnalyserTest {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             List list=censusAnalyser.SortingIndiaCSVFile(WRONG_CSV_FILE_PATH);
         } catch (CensusAnalyserException e) {
+            Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM,e.type);
+        }
 
+    }
+
+    @Test
+    public void givenStateCodeCensusCSVFile_ShouldCheckFirstState() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            List list=censusAnalyser.SortingStateCodeCSVFile(STATE_CODE_CSV_FILE_PATH);
+            Assert.assertEquals(true,list.get(0).toString().contains("Andaman and Nicobar Islands"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenStateCodeCensusCSVFile_ShouldCheckLastState() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+
+            List list=censusAnalyser.SortingStateCodeCSVFile(STATE_CODE_CSV_FILE_PATH);
+            Assert.assertEquals(true,list.get(36).toString().contains("West Bengal"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void givenWrongStateCodeCensusCSVFile_ShouldCheckLastState()  {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            List list=censusAnalyser.SortingStateCodeCSVFile(WRONG_STATE_CODE_FILE_PATH );
+        } catch (CensusAnalyserException e) {
+            Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM,e.type);
         }
 
     }
