@@ -2,6 +2,9 @@ package censusanalyser;
 
 import CSVBuilder.CSVBuilderException;
 import CSVBuilder.OpenCSVBuilder;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -62,7 +65,7 @@ public class CensusAnalyser {
     }
 
 
-        public List SortingIndiaCSVFile(String csvFilePath) throws CensusAnalyserException{
+        public String SortingIndiaCSVFile(String csvFilePath) throws CensusAnalyserException{
             try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath)))
             {
                 Iterator<IndiaCensusCSV> censusCSVIterator = new OpenCSVBuilder().getCsvFileIterable(reader,IndiaCensusCSV.class);
@@ -71,10 +74,10 @@ public class CensusAnalyser {
                     listIndiaCSv.add(censusCSVIterator.next());
                 }
                 Collections.sort(listIndiaCSv,new ObjectComparatorEx());
-                System.out.println(listIndiaCSv);
-                return listIndiaCSv;
+                String prettyJson=new GsonBuilder().setPrettyPrinting().create().toJson(listIndiaCSv);
+                System.out.println(prettyJson);
+                return prettyJson;
             } catch (IOException e) {
-              //  e.printStackTrace();
             } catch (CSVBuilderException e) {
                 e.printStackTrace();
             } catch (IllegalArgumentException e) {
@@ -88,7 +91,7 @@ public class CensusAnalyser {
         }
 
 
-    public List SortingStateCodeCSVFile(String csvFilePath) throws CensusAnalyserException{
+    public String SortingStateCodeCSVFile(String csvFilePath) throws CensusAnalyserException{
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath)))
         {
             Iterator<CSVState> censusCSVIterator = new OpenCSVBuilder().getCsvFileIterable(reader,CSVState.class);
@@ -97,10 +100,10 @@ public class CensusAnalyser {
                 listStateCSv.add(censusCSVIterator.next());
             }
             Collections.sort(listStateCSv,new ObjectComparatorEx());
-            System.out.println(listStateCSv);
-            return listStateCSv;
+            String prettyJson=new GsonBuilder().setPrettyPrinting().create().toJson(listStateCSv);
+            System.out.println(prettyJson);
+            return prettyJson;
         } catch (IOException e) {
-            //  e.printStackTrace();
         } catch (CSVBuilderException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
