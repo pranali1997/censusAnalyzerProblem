@@ -30,7 +30,10 @@ public class CensusAnalyser {
                     CensusAnalyserException.ExceptionType.INVALID_DELIMITER);
         }catch (CSVBuilderException e){
             throw new CensusAnalyserException(e.getMessage(),e.type.name());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return 0;
     }
 
     public int loadStateCensusData(String csvFilePath) throws CensusAnalyserException {
@@ -57,6 +60,7 @@ public class CensusAnalyser {
         return namOfEateries;
     }
 
+
         public List SortingIndiaCSVFile(String csvFilePath) throws CensusAnalyserException{
             try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath)))
             {
@@ -81,6 +85,7 @@ public class CensusAnalyser {
             }
             return null;
         }
+
     }
 
 
