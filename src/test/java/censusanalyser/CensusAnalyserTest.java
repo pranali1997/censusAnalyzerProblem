@@ -1,8 +1,15 @@
 package censusanalyser;
 
+import CSVBuilder.CSVBuilderException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import java.io.IOException;
+import java.nio.file.NoSuchFileException;
+import java.util.List;
+
+import static CSVBuilder.CSVBuilderException.ExceptionType.CENSUS_FILE_PROBLEM;
 
 public class CensusAnalyserTest {
 
@@ -128,4 +135,38 @@ public class CensusAnalyserTest {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.INVALID_DELIMITER,e.type);
         }
     }
+
+    @Test
+    public void givenIndianStateCensusCSVFile_ShouldCheckFirstState() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            List list=censusAnalyser.SortingIndiaCSVFile(INDIA_CENSUS_CSV_FILE_PATH);
+            Assert.assertEquals(true,list.get(0).toString().contains("Andhra Pradesh"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenIndianStateCensusCSVFile_ShouldCheckLastState() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            List list=censusAnalyser.SortingIndiaCSVFile(INDIA_CENSUS_CSV_FILE_PATH);
+            Assert.assertEquals(true,list.get(28).toString().contains("West Bengal"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenWrongIndianStateCensusCSVFile_ShouldCheckLastState()  {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            List list=censusAnalyser.SortingIndiaCSVFile(WRONG_CSV_FILE_PATH);
+        } catch (CensusAnalyserException e) {
+
+        }
+
+    }
+
 }
