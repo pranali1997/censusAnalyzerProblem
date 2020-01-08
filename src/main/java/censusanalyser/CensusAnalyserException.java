@@ -6,7 +6,7 @@ public class CensusAnalyserException extends Exception {
         this.type= ExceptionType.valueOf(name);
     }
 
-    public enum ExceptionType {
+   public enum ExceptionType {
         CENSUS_FILE_PROBLEM, UNABLE_TO_PARSE,INVALID_DELIMITER
     }
 

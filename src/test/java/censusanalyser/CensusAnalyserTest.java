@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.List;
+
 public class CensusAnalyserTest {
 
     private static final String INDIA_CENSUS_CSV_FILE_PATH = "./src/test/resources/IndiaStateCensusData.csv";
@@ -128,4 +130,27 @@ public class CensusAnalyserTest {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.INVALID_DELIMITER,e.type);
         }
     }
+
+    @Test
+    public void givenIndianStateCensusCSVFile_ShouldCheckFirstState() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            List list=censusAnalyser.SortingCSVFile(INDIA_CENSUS_CSV_FILE_PATH);
+            Assert.assertEquals(true,list.get(0).toString().contains("Andhra Pradesh"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenIndianStateCensusCSVFile_ShouldCheckLastState() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            List list=censusAnalyser.SortingCSVFile(INDIA_CENSUS_CSV_FILE_PATH);
+            Assert.assertEquals(true,list.get(28).toString().contains("West Bengal"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
