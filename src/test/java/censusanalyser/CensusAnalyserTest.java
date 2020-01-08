@@ -148,8 +148,8 @@ public class CensusAnalyserTest {
         try {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
 
-            List list= Collections.singletonList(censusAnalyser.SortingIndiaCSVFile(INDIA_CENSUS_CSV_FILE_PATH));
-            Assert.assertEquals(true,list.get(28).toString().contains("West Bengal"));
+            List<String> list = Collections.singletonList(censusAnalyser.SortingIndiaCSVFile(INDIA_CENSUS_CSV_FILE_PATH));
+            Assert.assertEquals(true,list.get(30).toString().contains("West Bengal"));
         } catch (Exception e) {
             e.printStackTrace();
         }
