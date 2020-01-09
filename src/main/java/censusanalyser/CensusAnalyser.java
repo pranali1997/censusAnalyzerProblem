@@ -2,8 +2,7 @@ package censusanalyser;
 
 import CSVBuilder.CSVBuilderException;
 import CSVBuilder.OpenCSVBuilder;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
+import org.json.JSONArray;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -65,19 +64,24 @@ public class CensusAnalyser {
     }
 
 
-        public String SortingIndiaCSVFile(String csvFilePath) throws CensusAnalyserException{
+        public JSONArray SortingIndiaCSVFile(String csvFilePath) throws CensusAnalyserException{
             try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath)))
             {
                 Iterator<IndiaCensusCSV> censusCSVIterator = new OpenCSVBuilder().getCsvFileIterable(reader,IndiaCensusCSV.class);
-                List<IndiaCensusCSV> listIndiaCSv = new ArrayList<>();
+                List listIndiaCSv = new ArrayList();
                 while (censusCSVIterator.hasNext()) {
                     listIndiaCSv.add(censusCSVIterator.next());
                 }
                 Comparator<IndiaCensusCSV> codeComparator=(o1,o2) -> ((o1.toString()).compareTo(o2.toString())<0)?-1:1;
                 Collections.sort(listIndiaCSv,codeComparator);
-                String prettyJson=new GsonBuilder().setPrettyPrinting().create().toJson(listIndiaCSv);
-                System.out.println(prettyJson);
-                return prettyJson;
+                JSONArray jsonArray=new JSONArray();
+                for(int i=0;i<listIndiaCSv.size();i++)
+                {
+                    jsonArray.put(listIndiaCSv.get(i));
+                }
+               // String prettyJson=new GsonBuilder().setPrettyPrinting().create().toJson(listIndiaCSv);
+                System.out.println(jsonArray);
+                return jsonArray;
             } catch (IOException e) {
             } catch (CSVBuilderException e) {
                 e.printStackTrace();
@@ -92,7 +96,7 @@ public class CensusAnalyser {
         }
 
 
-    public String SortingStateCodeCSVFile(String csvFilePath) throws CensusAnalyserException{
+    public JSONArray SortingStateCodeCSVFile(String csvFilePath) throws CensusAnalyserException{
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath)))
         {
             Iterator<CSVState> censusCSVIterator = new OpenCSVBuilder().getCsvFileIterable(reader,CSVState.class);
@@ -102,9 +106,14 @@ public class CensusAnalyser {
             }
             Comparator<CSVState> codeComparator=(o1,o2) -> ((o1.stateCode).compareTo(o2.stateCode)<0)?-1:1;
             Collections.sort(listStateCSv,codeComparator);
-            String prettyJson=new GsonBuilder().setPrettyPrinting().create().toJson(listStateCSv);
-            System.out.println(prettyJson);
-            return prettyJson;
+            JSONArray jsonArray=new JSONArray();
+           // String prettyJson=new GsonBuilder().setPrettyPrinting().create().toJson(listStateCSv);
+            for(int i=0;i<listStateCSv.size();i++)
+            {
+                jsonArray.put(listStateCSv.get(i));
+            }
+            System.out.println(jsonArray);
+            return jsonArray;
         } catch (IOException e) {
         } catch (CSVBuilderException e) {
             e.printStackTrace();
