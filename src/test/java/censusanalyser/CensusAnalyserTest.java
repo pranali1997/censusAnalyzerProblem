@@ -170,4 +170,22 @@ public class CensusAnalyserTest {
         Assert.assertEquals(true, indiaCensusCSV[36].stateCode.contains("WB"));
     }
 
+    @Test
+    public void givenIndianStateCensusCSVFile_ShouldGivenStatePopulation_AndCheckedDataAtFirstPosition() throws CensusAnalyserException {
+        CensusAnalyser censusAnalyser = new CensusAnalyser();
+        censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH );
+        String censusCSVList = censusAnalyser.SortIndiaStateCSVByPopulation();
+        IndiaCensusCSV[] indiaCensusCSV = new Gson().fromJson(censusCSVList, IndiaCensusCSV[].class);
+        Assert.assertEquals(199812341, indiaCensusCSV[0].population);
+    }
+
+
+    @Test
+    public void givenIndianStateCensusCSVFile_ShouldGivenStatePopulation_AndCheckedDataAtLastPosition() throws CensusAnalyserException {
+        CensusAnalyser censusAnalyser = new CensusAnalyser();
+        censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH );
+        String censusCSVList = censusAnalyser.SortIndiaStateCSVByPopulation();
+        IndiaCensusCSV[] indiaCensusCSV = new Gson().fromJson(censusCSVList, IndiaCensusCSV[].class);
+        Assert.assertEquals(607688, indiaCensusCSV[28].population);
+    }
 }
