@@ -111,6 +111,19 @@ public class CensusAnalyser {
         return jsonString;
 
     }
+
+    public String SortingIndiaCSVFileByAreaDensity() throws CensusAnalyserException {
+        if (indiaCensusDAOList ==null || indiaCensusDAOList.size()==0)
+        {
+            throw new CensusAnalyserException("NO_CENSUS_DATA",
+                    CensusAnalyserException.ExceptionType.INCORRECT_FILE_DATA);
+        }
+        Comparator <IndiaCensusDAO> codeComparator = (o1, o2) -> (Integer.compare(o1.densityPerSqKm,o2.densityPerSqKm) < 0) ? -1 : 1;
+        Collections.sort(indiaCensusDAOList, codeComparator);
+        String jsonString = new Gson().toJson(indiaCensusDAOList);
+        return jsonString;
+
+    }
 }
 
 
