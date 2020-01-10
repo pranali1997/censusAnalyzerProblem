@@ -1,17 +1,10 @@
 package censusanalyser;
 
-import CSVBuilder.CSVBuilderException;
 import com.google.gson.Gson;
-import org.json.JSONException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-
-import static censusanalyser.CensusAnalyserException.ExceptionType.INCORRECT_FILE_DATA;
 
 public class CensusAnalyserTest {
 
@@ -177,15 +170,4 @@ public class CensusAnalyserTest {
         Assert.assertEquals(true, indiaCensusCSV[36].stateCode.contains("WB"));
     }
 
-    @Test
-    public void givenIndiaStateCensusFileNull_ShouldReturnException() throws CensusAnalyserException {
-        try {
-            CensusAnalyser censusAnalyser = new CensusAnalyser();
-            censusAnalyser.loadIndiaCensusData("/home/admin1/Downloads/CensusAnalyser/src/test/resources/IndiaStateNull.csv");
-            String censusCSVList = censusAnalyser.SortingIndiaCSVFile();
-            IndiaCensusCSV[] indiaCensusCSV = new Gson().fromJson(censusCSVList, IndiaCensusCSV[].class);
-        } catch (CensusAnalyserException e) {
-            Assert.assertEquals(INCORRECT_FILE_DATA, INCORRECT_FILE_DATA);
-        }
-    }
 }

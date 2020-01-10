@@ -7,7 +7,7 @@ public class CensusAnalyserException extends Exception {
     }
 
    public enum ExceptionType {
-        CENSUS_FILE_PROBLEM, UNABLE_TO_PARSE,INVALID_DELIMITER,INCORRECT_FILE_DATA
+        CENSUS_FILE_PROBLEM, UNABLE_TO_PARSE,INCORRECT_FILE_DATA,INVALID_DELIMITER
     }
 
     public ExceptionType type;

@@ -14,14 +14,23 @@ import java.util.*;
 
 public class CensusAnalyser {
 
-    List<IndiaCensusCSV> indiaCensusCSVS=null;
     List<CSVState> csvStates=null;
+    List<IndiaCensusDAO> indiaCensusDAOList= null;
+
+    public CensusAnalyser() {
+        this.indiaCensusDAOList=new ArrayList<IndiaCensusDAO>();
+    }
+
     public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));){
             ICSVBuilder icsvBuilder= CSVBuilderFactory.createCSVBuilder();
-            indiaCensusCSVS = icsvBuilder.getCSVList(reader,IndiaCensusCSV.class);
+            List<IndiaCensusCSV> indiaCensusList = icsvBuilder.getCSVList(reader,IndiaCensusCSV.class);
+            for (int i=0;i<indiaCensusList.size();i++)
+            {
+                this.indiaCensusDAOList.add(new IndiaCensusDAO(indiaCensusList.get(i)));
+            }
 
-            return indiaCensusCSVS.size();
+            return indiaCensusDAOList.size();
         } catch (NoSuchFileException e){
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
@@ -60,14 +69,14 @@ public class CensusAnalyser {
 
 
     public String SortingIndiaCSVFile() throws CensusAnalyserException {
-        if (indiaCensusCSVS==null || indiaCensusCSVS.size()==0)
+        if (indiaCensusDAOList ==null || indiaCensusDAOList.size()==0)
         {
             throw new CensusAnalyserException("NO_CENSUS_DATA",
                     CensusAnalyserException.ExceptionType.INCORRECT_FILE_DATA);
         }
-              Comparator <IndiaCensusCSV> codeComparator = (o1, o2) -> ((o1.toString()).compareTo(o2.toString()) < 0) ? -1 : 1;
-        Collections.sort(indiaCensusCSVS, codeComparator);
-        String jsonString = new Gson().toJson(indiaCensusCSVS);
+        Comparator <IndiaCensusDAO> codeComparator = (o1, o2) -> ((o1.state).compareTo(o2.state) < 0) ? -1 : 1;
+        Collections.sort(indiaCensusDAOList, codeComparator);
+        String jsonString = new Gson().toJson(indiaCensusDAOList);
         return jsonString;
 
     }
