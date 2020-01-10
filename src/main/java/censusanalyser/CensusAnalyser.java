@@ -112,7 +112,7 @@ public class CensusAnalyser {
 
     }
 
-    public String SortingIndiaCSVFileByAreaDensity() throws CensusAnalyserException {
+    public String SortingIndiaCSVFileByDensity() throws CensusAnalyserException {
         if (indiaCensusDAOList ==null || indiaCensusDAOList.size()==0)
         {
             throw new CensusAnalyserException("NO_CENSUS_DATA",
