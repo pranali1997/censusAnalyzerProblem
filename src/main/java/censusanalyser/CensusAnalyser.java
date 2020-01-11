@@ -17,10 +17,12 @@ public class CensusAnalyser {
 
         List<IndiaCensusDAO> indiaCensusDAOList= null;
         List<StateCensusDAO> stateCensusDAOList = null;
+        List<USCensusDAO> USCensusDAOList= null;
 
     public CensusAnalyser() {
         this.indiaCensusDAOList=new ArrayList<IndiaCensusDAO>();
         this.stateCensusDAOList=new ArrayList<StateCensusDAO>();
+        this.USCensusDAOList=new ArrayList<USCensusDAO>();
     }
 
     public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
@@ -131,6 +133,33 @@ public class CensusAnalyser {
         String jsonString = new Gson().toJson(indiaCensusDAOList);
         return jsonString;
 
+    }
+
+
+    public int loadUSCensusData(String csvFilePath) throws CensusAnalyserException {
+        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));){
+            ICSVBuilder icsvBuilder= CSVBuilderFactory.createCSVBuilder();
+            List<USCensusCSV> USCensusList = icsvBuilder.getCSVList(reader,USCensusCSV.class);
+            for (int i=0;i<USCensusList.size();i++)
+            {
+                this.USCensusDAOList.add(new USCensusDAO(USCensusList.get(i)));
+            }
+            return USCensusDAOList.size();
+        } catch (NoSuchFileException e){
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+        } catch (IOException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+        } catch (IllegalArgumentException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.UNABLE_TO_PARSE);
+        }catch (RuntimeException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.INVALID_DELIMITER);
+        }catch (CSVBuilderException e){
+            throw new CensusAnalyserException(e.getMessage(),e.type.name());
+        }
     }
 }
 

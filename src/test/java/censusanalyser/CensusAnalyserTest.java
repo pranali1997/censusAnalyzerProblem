@@ -226,4 +226,16 @@ public class CensusAnalyserTest {
         Assert.assertEquals("Goa", indiaCensusCSV[28].state);
     }
 
+    @Test
+    public void givenUSStateCensusCSVFileReturnsCorrectRecords() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            int numOfRecords = censusAnalyser.loadUSCensusData("./src/test/resources/USCensusData .csv");
+            Assert.assertEquals(51, numOfRecords);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
