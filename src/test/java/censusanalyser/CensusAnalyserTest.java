@@ -153,7 +153,7 @@ public class CensusAnalyserTest {
 
 
     @Test
-    public void givenStateCodeCensusCSVFile_ShouldGivenStateName_AndCheckedDataAtFirstPosition() throws CensusAnalyserException {
+    public void givenStateCodeCensusCSVFile_ShouldGivenStateCode_AndCheckedDataAtFirstPosition() throws CensusAnalyserException {
         CensusAnalyser censusAnalyser = new CensusAnalyser();
         censusAnalyser.loadStateCensusData(STATE_CODE_CSV_FILE_PATH);
         String censusCSVList = censusAnalyser.SortingStateCodeCSVFile();
@@ -162,12 +162,12 @@ public class CensusAnalyserTest {
     }
 
     @Test
-    public void givenStateCodeCensusCSVFile_ShouldGivenStateName_AndCheckedDataAtLastPosition() throws CensusAnalyserException {
+    public void givenStateCodeCensusCSVFile_ShouldGivenStateCode_AndCheckedDataAtLastPosition() throws CensusAnalyserException {
         CensusAnalyser censusAnalyser = new CensusAnalyser();
         censusAnalyser.loadStateCensusData(STATE_CODE_CSV_FILE_PATH);
         String censusCSVList = censusAnalyser.SortingStateCodeCSVFile();
         CSVState[] indiaCensusCSV = new Gson().fromJson(censusCSVList, CSVState[].class);
-        Assert.assertEquals(true, indiaCensusCSV[36].stateCode.contains("WB"));
+        Assert.assertEquals("WB", indiaCensusCSV[36].stateCode);
     }
 
     @Test

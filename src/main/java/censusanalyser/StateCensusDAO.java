@@ -13,4 +13,8 @@ public class StateCensusDAO {
         stateCode=csvState.stateCode;
     }
 
+
+    public String getStateCode() {
+        return stateCode;
+    }
 }

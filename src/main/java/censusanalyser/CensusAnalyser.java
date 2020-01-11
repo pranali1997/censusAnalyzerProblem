@@ -11,11 +11,12 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CensusAnalyser {
 
         List<IndiaCensusDAO> indiaCensusDAOList= null;
-        List<StateCensusDAO> stateCensusDAOList=null;
+        List<StateCensusDAO> stateCensusDAOList = null;
 
     public CensusAnalyser() {
         this.indiaCensusDAOList=new ArrayList<IndiaCensusDAO>();
@@ -52,10 +53,8 @@ public class CensusAnalyser {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));){
             ICSVBuilder icsvBuilder= CSVBuilderFactory.createCSVBuilder();
             List<CSVState> csvStates = icsvBuilder.getCSVList(reader,CSVState.class);
-            for (int i=0;i<csvStates.size();i++)
-            {
-                this.stateCensusDAOList.add(new StateCensusDAO(csvStates.get(i)));
-            }return csvStates.size();
+            csvStates.stream().filter(stateCensusData -> stateCensusDAOList.add(new StateCensusDAO(stateCensusData))).collect(Collectors.toList());
+            return csvStates.size();
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
@@ -90,12 +89,9 @@ public class CensusAnalyser {
             throw new CensusAnalyserException("NO_CENSUS_DATA",
                     CensusAnalyserException.ExceptionType.INCORRECT_FILE_DATA);
         }
-        Comparator<StateCensusDAO> codeComparator=(o1,o2) -> ((o1.stateCode).compareTo(o2.stateCode)<0)?-1:1;
-            Collections.sort(stateCensusDAOList,codeComparator);
-            String jsonString=new Gson().toJson(stateCensusDAOList);
+        List<StateCensusDAO> censusList = stateCensusDAOList.stream().sorted(Comparator.comparing(StateCensusDAO::getStateCode)).collect(Collectors.toList());
+         String jsonString=new Gson().toJson(censusList);
             return jsonString;
-
-
     }
 
     public String SortIndiaStateCSVByPopulation() throws CensusAnalyserException {
