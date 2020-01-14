@@ -11,7 +11,7 @@ public class USCensusCSV extends CensusAnalyser{
     public String State;
 
     @CsvBindByName(column = "Population", required = true)
-    public int Population;
+    public int population;
 
     @CsvBindByName(column = "Housing_units", required = true)
     public int Housing_units;
@@ -36,7 +36,7 @@ public class USCensusCSV extends CensusAnalyser{
         return "USCensusCSV{" +
                 "State_Id='" + State_Id + '\'' +
                 ", State='" + State + '\'' +
-                ", population=" + Population +
+                ", population=" + population +
                 ", Housing_units=" + Housing_units +
                 ", Total_Area=" + Total_Area +
                 ", Water_Area=" + Water_Area +
