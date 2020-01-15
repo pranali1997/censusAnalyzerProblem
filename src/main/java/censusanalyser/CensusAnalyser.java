@@ -8,24 +8,30 @@ import java.util.stream.Collectors;
 
 public class CensusAnalyser {
 
-
+    public enum Country{
+        INDIA,US
+    }
 
     Map<String,CensusDAO> CensusDAOMap = null;
     public CensusAnalyser() {
         this.CensusDAOMap = new TreeMap<>();
     }
 
+    public int loadCensusData(CensusAnalyser.Country country,String... csvFilePath) throws CensusAnalyserException{
+        CensusDAOMap= CensusAdapterFactory.getCensusData(country,csvFilePath);
+        return CensusDAOMap.size();
+    }
 
 
-    public int loadIndiaCensusData(String... csvFilePath) throws CensusAnalyserException {
-        CensusDAOMap =new CensusLoader().combiningCensusData(IndiaCensusCSV.class,csvFilePath);
+    public int loadIndiaCensusData(Class csvclass  ,String... csvFilePath) throws CensusAnalyserException {
+        CensusDAOMap =new IndiaCensusAdapter().combiningCensusData(IndiaCensusCSV.class,csvFilePath);
         System.out.println(CensusDAOMap);
               return CensusDAOMap.size();
     }
 
 
-    public int loadUSCensusData(String... csvFilePath) throws CensusAnalyserException {
-        CensusDAOMap = new CensusLoader().combiningCensusData(USCensusCSV.class,csvFilePath);
+    public int loadUSCensusData(Class csvclass ,String... csvFilePath) throws CensusAnalyserException {
+        CensusDAOMap = new IndiaCensusAdapter().combiningCensusData(USCensusCSV.class,csvFilePath);
         System.out.println(CensusDAOMap);
         return CensusDAOMap.size();
     }
