@@ -13,8 +13,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.StreamSupport;
 
-public class CensusLoader {
-
+public class CensusAdapter {
 
 
     public <E> Map<String,CensusDAO> combiningCensusData(Class<E> censusCSVClass, String... csvFilePath) throws CensusAnalyserException {
@@ -24,14 +23,14 @@ public class CensusLoader {
             if (censusCSVClass.getName().equals("censusanalyser.IndiaCensusCSV")) {
                 List<E> censusList = icsvBuilder.getCSVList(reader, IndiaCensusCSV.class);
                 StreamSupport.stream(censusList.spliterator(),false)
-                       .map(IndiaCensusCSV.class::cast)
-                       .forEach(censusCSV -> censusStateMap.put(censusCSV.state,new CensusDAO(censusCSV)));
+                        .map(IndiaCensusCSV.class::cast)
+                        .forEach(censusCSV -> censusStateMap.put(censusCSV.state,new CensusDAO(censusCSV)));
             }
             if(censusCSVClass.getName().equals("censusanalyser.USCensusCSV")){
                 List<E> censusList = icsvBuilder.getCSVList(reader, USCensusCSV.class);
-                    StreamSupport.stream(censusList.spliterator(),false)
-                            .map(USCensusCSV.class::cast)
-                            .forEach(censusCSV -> censusStateMap.put(censusCSV.State,new CensusDAO(censusCSV)));
+                StreamSupport.stream(censusList.spliterator(),false)
+                        .map(USCensusCSV.class::cast)
+                        .forEach(censusCSV -> censusStateMap.put(censusCSV.State,new CensusDAO(censusCSV)));
             }
             if (csvFilePath.length==1)return censusStateMap;
             this.loadStateCensusData(csvFilePath[1],censusStateMap);
@@ -51,13 +50,11 @@ public class CensusLoader {
         }
 
     }
-
-
     public Map<String,CensusDAO> loadStateCensusData(String csvFilePath,Map<String,CensusDAO> censusStateMap) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
             ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
             List<CSVState> csvStates = icsvBuilder.getCSVList(reader, CSVState.class);
-                StreamSupport.stream(csvStates.spliterator(),false)
+            StreamSupport.stream(csvStates.spliterator(),false)
                     .filter(CSVStateList->censusStateMap.get(CSVStateList.stateName)!=null)
                     .forEach(CSVStateList ->censusStateMap.get(CSVStateList.stateName).State_Id= CSVStateList.stateCode);
 
@@ -75,4 +72,5 @@ public class CensusLoader {
             throw new CensusAnalyserException(e.getMessage(), e.type.name());
         }
     }
+
 }
