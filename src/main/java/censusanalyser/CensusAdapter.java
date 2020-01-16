@@ -23,13 +23,13 @@ public abstract class CensusAdapter {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath[0]))) {
             ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
             if (censusCSVClass.getName().equals("censusanalyser.IndiaCensusCSV")) {
-                List<E> censusList = icsvBuilder.getCSVList(reader, IndiaCensusCSV.class);
+                List<E> censusList = icsvBuilder.getCSVList(reader, censusCSVClass);
                 StreamSupport.stream(censusList.spliterator(),false)
                         .map(IndiaCensusCSV.class::cast)
                         .forEach(censusCSV -> censusStateMap.put(censusCSV.state,new CensusDAO(censusCSV)));
             }
             if(censusCSVClass.getName().equals("censusanalyser.USCensusCSV")){
-                List<E> censusList = icsvBuilder.getCSVList(reader, USCensusCSV.class);
+                List<E> censusList = icsvBuilder.getCSVList(reader, censusCSVClass);
                 StreamSupport.stream(censusList.spliterator(),false)
                         .map(USCensusCSV.class::cast)
                         .forEach(censusCSV -> censusStateMap.put(censusCSV.State,new CensusDAO(censusCSV)));

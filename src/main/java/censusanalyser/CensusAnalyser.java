@@ -22,10 +22,11 @@ public class CensusAnalyser {
         this.country =country;
     }
 
-    public int loadCensusData(CensusAnalyser.Country country,String... csvFilePath) throws CensusAnalyserException{
+    public int loadCensusData(String... csvFilePath) throws CensusAnalyserException{
         CensusDAOMap= CensusAdapterFactory.getCensusData(country,csvFilePath);
         return CensusDAOMap.size();
     }
+
 
     public String SortingIndiaCSVFile() throws CensusAnalyserException, IOException {
         if (CensusDAOMap == null || CensusDAOMap.size() == 0) {
@@ -33,10 +34,11 @@ public class CensusAnalyser {
                     CensusAnalyserException.ExceptionType.INCORRECT_FILE_DATA);
         }
 
-        List <CensusDAO> sortedList = CensusDAOMap.values().stream().collect(Collectors.toList());
-        Comparator<CensusDAO> codeComparator = (o1, o2) -> ((o1.state).compareTo(o2.state) < 0) ? -1 : 1;
-        Collections.sort(sortedList, codeComparator);
-        String jsonString = new Gson().toJson(sortedList);
+        List codeCensusList=CensusDAOMap.values().stream()
+                .sorted(Comparator.comparing(data -> data.state))
+                .map(censusDAO -> censusDAO.getCensusDTO(country))
+                .collect(Collectors.toList());
+        String jsonString = new Gson().toJson(codeCensusList);
         System.out.println(jsonString);
         return jsonString;
 
@@ -49,9 +51,12 @@ public class CensusAnalyser {
         }
 
        List codeCensusList=CensusDAOMap.values().stream()
-               .sorted((data1,data2)->data1.StateCode.compareTo(data2.StateCode))
+               .sorted((Comparator.comparing(censusData -> censusData.StateCode)))
                  .map(censusDAO -> censusDAO.getCensusDTO(country))
                  .collect(Collectors.toList());
+
+
+       //Collections.sort( codeCensusList,codeComparator);
         String jsonString = new Gson().toJson(codeCensusList);
         return jsonString;
    }
@@ -61,11 +66,15 @@ public class CensusAnalyser {
             throw new CensusAnalyserException("NO_CENSUS_DATA",
                     CensusAnalyserException.ExceptionType.INCORRECT_FILE_DATA);
         }
-        List <CensusDAO> sortedList = CensusDAOMap.values().stream().collect(Collectors.toList());
 
-        Comparator<CensusDAO> codeComparator = (o1, o2) -> (Integer.compare(o1.population, o2.population) > 0) ? -1 : 1;
-        Collections.sort(sortedList, codeComparator);
-        String jsonString = new Gson().toJson(sortedList);
+
+        List codeCensusList=CensusDAOMap.values().stream()
+                .sorted((Comparator.comparing(censusData -> censusData.population)))
+                .map(censusDAO -> censusDAO.getCensusDTO(country))
+                .collect(Collectors.toList());
+                Collections.reverse(codeCensusList);
+        String jsonString = new Gson().toJson(codeCensusList);
+        System.out.println(jsonString);
         return jsonString;
 
     }
@@ -75,11 +84,14 @@ public class CensusAnalyser {
             throw new CensusAnalyserException("NO_CENSUS_DATA",
                     CensusAnalyserException.ExceptionType.INCORRECT_FILE_DATA);
         }
-        List <CensusDAO> sortedList = CensusDAOMap.values().stream().collect(Collectors.toList());
 
-        Comparator<CensusDAO> codeComparator = (o1, o2) -> (Integer.compare(o1.densityPerSqKm, o2.densityPerSqKm) > 0) ? -1 : 1;
-        Collections.sort(sortedList, codeComparator);
-        String jsonString = new Gson().toJson(sortedList);
+
+        List codeCensusList=CensusDAOMap.values().stream()
+                .sorted((Comparator.comparing(censusData -> censusData.densityPerSqKm)))
+                .map(censusDAO -> censusDAO.getCensusDTO(country))
+                .collect(Collectors.toList());
+                Collections.reverse(codeCensusList);
+        String jsonString = new Gson().toJson(codeCensusList);
         return jsonString;
 
     }
@@ -89,11 +101,14 @@ public class CensusAnalyser {
             throw new CensusAnalyserException("NO_CENSUS_DATA",
                     CensusAnalyserException.ExceptionType.INCORRECT_FILE_DATA);
         }
-        List <CensusDAO> sortedList = CensusDAOMap.values().stream().collect(Collectors.toList());
 
-        Comparator<CensusDAO> codeComparator = (o1, o2) -> (Integer.compare(o1.areaInSqKm, o2.areaInSqKm) > 0) ? -1 : 1;
-        Collections.sort(sortedList,codeComparator);
-        String jsonString = new Gson().toJson(sortedList);
+
+        List codeCensusList=CensusDAOMap.values().stream()
+                .sorted((Comparator.comparing(censusData -> censusData.areaInSqKm)))
+                .map(censusDAO -> censusDAO.getCensusDTO(country))
+                .collect(Collectors.toList());
+        String jsonString = new Gson().toJson(codeCensusList);
+        System.out.println(jsonString);
         return jsonString;
 
     }

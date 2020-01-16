@@ -4,10 +4,6 @@ import com.opencsv.bean.CsvBindByName;
 
 public class USCensusCSV extends CensusAnalyser{
 
-    public USCensusCSV() {
-
-    }
-
     @CsvBindByName(column = "State_Id", required = true)
     public String State_Id;
 
@@ -35,8 +31,19 @@ public class USCensusCSV extends CensusAnalyser{
     @CsvBindByName(column = "Housing_Density", required = true)
     public double Housing_Density;
 
-    public USCensusCSV(String stateCode, int population, double population_density, double total_area) {
-       // super();
+
+    public USCensusCSV(String state_Id, int population, double total_Area, double water_Area, double land_Area, double population_Density, double housing_Density) {
+        //per(country);
+        this.State_Id = state_Id;
+        this.population = population;
+        this.Total_Area = total_Area;
+        this.Water_Area = water_Area;
+        this.Land_Area = land_Area;
+        this.Population_Density = population_Density;
+        this.Housing_Density = housing_Density;
+    }
+
+    public USCensusCSV() {
     }
 
     @Override
