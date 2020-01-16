@@ -28,7 +28,7 @@ public class CensusAnalyser {
     }
 
 
-    public String SortingIndiaCSVFile() throws CensusAnalyserException, IOException {
+    public String sortingIndiaCSVFile() throws CensusAnalyserException, IOException {
         if (censusDAOMap == null || censusDAOMap.size() == 0) {
             throw new CensusAnalyserException("NO_CENSUS_DATA",
                     CensusAnalyserException.ExceptionType.INCORRECT_FILE_DATA);
@@ -39,28 +39,26 @@ public class CensusAnalyser {
                 .map(censusDAO -> censusDAO.getCensusDTO(country))
                 .collect(Collectors.toList());
         String jsonString = new Gson().toJson(codeCensusList);
-        System.out.println(jsonString);
         return jsonString;
 
     }
 
-   public String SortingStateCodeCSVFile() throws CensusAnalyserException {
+   public String sortingStateCodeCSVFile() throws CensusAnalyserException {
          if (censusDAOMap == null || censusDAOMap.size() == 0) {
             throw new CensusAnalyserException("NO_CENSUS_DATA",
                     CensusAnalyserException.ExceptionType.INCORRECT_FILE_DATA);
         }
 
        List codeCensusList= censusDAOMap.values().stream()
-               .sorted((Comparator.comparing(censusData -> censusData.StateCode)))
+               .sorted((Comparator.comparing(censusData -> censusData.stateCode)))
                  .map(censusDAO -> censusDAO.getCensusDTO(country))
                  .collect(Collectors.toList());
-
 
         String jsonString = new Gson().toJson(codeCensusList);
         return jsonString;
    }
 
-    public String SortIndiaStateCSVByPopulation() throws CensusAnalyserException {
+    public String sortIndiaStateCSVByPopulation() throws CensusAnalyserException {
         if (censusDAOMap == null || censusDAOMap.size() == 0) {
             throw new CensusAnalyserException("NO_CENSUS_DATA",
                     CensusAnalyserException.ExceptionType.INCORRECT_FILE_DATA);
@@ -73,12 +71,11 @@ public class CensusAnalyser {
                 .collect(Collectors.toList());
                 Collections.reverse(codeCensusList);
         String jsonString = new Gson().toJson(codeCensusList);
-        System.out.println(jsonString);
         return jsonString;
 
     }
 
-    public String SortingIndiaCSVFileByDensity() throws CensusAnalyserException {
+    public String sortingIndiaCSVFileByDensity() throws CensusAnalyserException {
         if (censusDAOMap == null || censusDAOMap.size() == 0) {
             throw new CensusAnalyserException("NO_CENSUS_DATA",
                     CensusAnalyserException.ExceptionType.INCORRECT_FILE_DATA);
@@ -95,7 +92,7 @@ public class CensusAnalyser {
 
     }
 
-    public String SortingIndiaCSVFileByArea() throws CensusAnalyserException {
+    public String sortingIndiaCSVFileByArea() throws CensusAnalyserException {
         if (censusDAOMap == null || censusDAOMap.size() == 0) {
             throw new CensusAnalyserException("NO_CENSUS_DATA",
                     CensusAnalyserException.ExceptionType.INCORRECT_FILE_DATA);
@@ -107,7 +104,6 @@ public class CensusAnalyser {
                 .map(censusDAO -> censusDAO.getCensusDTO(country))
                 .collect(Collectors.toList());
         String jsonString = new Gson().toJson(codeCensusList);
-        System.out.println(jsonString);
         return jsonString;
 
     }

@@ -32,7 +32,7 @@ public abstract class CensusAdapter {
                 List<E> censusList = icsvBuilder.getCSVList(reader, censusCSVClass);
                 StreamSupport.stream(censusList.spliterator(),false)
                         .map(USCensusCSV.class::cast)
-                        .forEach(censusCSV -> censusStateMap.put(censusCSV.State,new CensusDAO(censusCSV)));
+                        .forEach(censusCSV -> censusStateMap.put(censusCSV.state,new CensusDAO(censusCSV)));
             }
 
             return  censusStateMap;

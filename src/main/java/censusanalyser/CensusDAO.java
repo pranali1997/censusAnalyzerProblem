@@ -14,30 +14,30 @@ public class CensusDAO {
         population = indiaCensusCSV.population;
     }
 
-    public String StateCode;
-    public int Housing_units;
-    public double Total_Area;
-    public double Water_Area;
-    public double Land_Area;
-    public double Population_Density;
-    public double Housing_Density;
+    public String stateCode;
+    public int housing_units;
+    public double total_Area;
+    public double water_Area;
+    public double land_Area;
+    public double population_Density;
+    public double housing_Density;
 
     public CensusDAO(USCensusCSV usCensusCSV) {
-        StateCode = usCensusCSV.State_Id;
-        state = usCensusCSV.State;
+        stateCode = usCensusCSV.state_Id;
+        state = usCensusCSV.state;
         population = usCensusCSV.population;
-        Housing_units = usCensusCSV.Housing_units;
-        Total_Area = usCensusCSV.Total_Area;
-        Water_Area = usCensusCSV.Water_Area;
-        Land_Area = usCensusCSV.Land_Area;
-        Population_Density = usCensusCSV.Population_Density;
-        Housing_Density = usCensusCSV.Housing_Density;
+        housing_units = usCensusCSV.housing_units;
+        total_Area = usCensusCSV.total_Area;
+        water_Area = usCensusCSV.water_Area;
+        land_Area = usCensusCSV.land_Area;
+        population_Density = usCensusCSV.population_Density;
+        housing_Density = usCensusCSV.housing_Density;
 
    }
 
     public  Object getCensusDTO(CensusAnalyser.Country country) {
         if(country.equals(CensusAnalyser.Country.US))
-            return new USCensusCSV(StateCode,Housing_units,Total_Area,Water_Area,Land_Area,Population_Density,Housing_Density);
+            return new USCensusCSV(stateCode, housing_units, total_Area, water_Area, land_Area, population_Density, housing_Density);
         return new IndiaCensusCSV(state,population,densityPerSqKm,areaInSqKm);
     }
 

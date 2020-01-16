@@ -4,42 +4,42 @@ import com.opencsv.bean.CsvBindByName;
 
 public class USCensusCSV extends CensusAnalyser{
 
-    @CsvBindByName(column = "State_Id", required = true)
-    public String State_Id;
+    @CsvBindByName(column = "state_Id", required = true)
+    public String state_Id;
 
-    @CsvBindByName(column = "State", required = true)
-    public String State;
+    @CsvBindByName(column = "state", required = true)
+    public String state;
 
     @CsvBindByName(column = "Population", required = true)
     public int population;
 
-    @CsvBindByName(column = "Housing_units", required = true)
-    public int Housing_units;
+    @CsvBindByName(column = "housing_units", required = true)
+    public int housing_units;
 
-    @CsvBindByName(column = "Total_Area", required = true)
-    public double Total_Area;
+    @CsvBindByName(column = "total_Area", required = true)
+    public double total_Area;
 
-    @CsvBindByName(column = "Water_Area", required = true)
-    public double Water_Area;
+    @CsvBindByName(column = "water_Area", required = true)
+    public double water_Area;
 
-    @CsvBindByName(column = "Land_Area", required = true)
-    public double Land_Area;
+    @CsvBindByName(column = "land_Area", required = true)
+    public double land_Area;
 
-    @CsvBindByName(column = "Population_Density", required = true)
-    public double Population_Density;
+    @CsvBindByName(column = "population_Density", required = true)
+    public double population_Density;
 
-    @CsvBindByName(column = "Housing_Density", required = true)
-    public double Housing_Density;
+    @CsvBindByName(column = "housing_Density", required = true)
+    public double housing_Density;
 
 
     public USCensusCSV(String state_Id, int population, double total_Area, double water_Area, double land_Area, double population_Density, double housing_Density) {
-        this.State_Id = state_Id;
+        this.state_Id = state_Id;
         this.population = population;
-        this.Total_Area = total_Area;
-        this.Water_Area = water_Area;
-        this.Land_Area = land_Area;
-        this.Population_Density = population_Density;
-        this.Housing_Density = housing_Density;
+        this.total_Area = total_Area;
+        this.water_Area = water_Area;
+        this.land_Area = land_Area;
+        this.population_Density = population_Density;
+        this.housing_Density = housing_Density;
     }
 
     public USCensusCSV() {
@@ -48,15 +48,15 @@ public class USCensusCSV extends CensusAnalyser{
     @Override
     public String toString() {
         return "USCensusCSV{" +
-                "State_Id='" + State_Id + '\'' +
-                ", State='" + State + '\'' +
+                "state_Id='" + state_Id + '\'' +
+                ", state='" + state + '\'' +
                 ", population=" + population +
-                ", Housing_units=" + Housing_units +
-                ", Total_Area=" + Total_Area +
-                ", Water_Area=" + Water_Area +
-                ", Land_Area=" + Land_Area +
-                ", Population_Density=" + Population_Density +
-                ", Housing_Density=" + Housing_Density +
+                ", housing_units=" + housing_units +
+                ", total_Area=" + total_Area +
+                ", water_Area=" + water_Area +
+                ", land_Area=" + land_Area +
+                ", population_Density=" + population_Density +
+                ", housing_Density=" + housing_Density +
                 '}';
     }
 }

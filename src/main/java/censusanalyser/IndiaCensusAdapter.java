@@ -19,8 +19,8 @@ public class IndiaCensusAdapter extends CensusAdapter {
             ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
             List<CSVState> csvStates = icsvBuilder.getCSVList(reader, CSVState.class);
                 StreamSupport.stream(csvStates.spliterator(),false)
-                    .filter(CSVStateList->censusStateMap.get(CSVStateList.stateName)!=null)
-                    .forEach(CSVStateList ->censusStateMap.get(CSVStateList.stateName).StateCode= CSVStateList.stateCode);
+                    .filter(csvStateList->censusStateMap.get(csvStateList.stateName)!=null)
+                    .forEach(csvStateList ->censusStateMap.get(csvStateList.stateName).stateCode = csvStateList.stateCode);
 
             return censusStateMap;
         } catch (IOException e) {
