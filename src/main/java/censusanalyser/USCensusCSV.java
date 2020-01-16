@@ -33,7 +33,6 @@ public class USCensusCSV extends CensusAnalyser{
 
 
     public USCensusCSV(String state_Id, int population, double total_Area, double water_Area, double land_Area, double population_Density, double housing_Density) {
-        //per(country);
         this.State_Id = state_Id;
         this.population = population;
         this.Total_Area = total_Area;
