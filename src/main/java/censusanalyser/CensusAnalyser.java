@@ -8,34 +8,24 @@ import java.util.stream.Collectors;
 
 public class CensusAnalyser {
 
-    public enum Country{
-        INDIA,US
+    private Country country;
+
+    public CensusAnalyser() {
+
     }
 
-    Map<String,CensusDAO> CensusDAOMap = null;
-    public CensusAnalyser() {
-        this.CensusDAOMap = new TreeMap<>();
+    public enum Country{INDIA,US}
+
+    Map<String,CensusDAO> CensusDAOMap =  new TreeMap<>();
+
+    public CensusAnalyser(Country country) {
+        this.country =country;
     }
 
     public int loadCensusData(CensusAnalyser.Country country,String... csvFilePath) throws CensusAnalyserException{
         CensusDAOMap= CensusAdapterFactory.getCensusData(country,csvFilePath);
         return CensusDAOMap.size();
     }
-
-
-    public int loadIndiaCensusData(Class csvclass  ,String... csvFilePath) throws CensusAnalyserException {
-        CensusDAOMap =new IndiaCensusAdapter().combiningCensusData(IndiaCensusCSV.class,csvFilePath);
-        System.out.println(CensusDAOMap);
-              return CensusDAOMap.size();
-    }
-
-
-    public int loadUSCensusData(Class csvclass ,String... csvFilePath) throws CensusAnalyserException {
-        CensusDAOMap = new IndiaCensusAdapter().combiningCensusData(USCensusCSV.class,csvFilePath);
-        System.out.println(CensusDAOMap);
-        return CensusDAOMap.size();
-    }
-
 
     public String SortingIndiaCSVFile() throws CensusAnalyserException, IOException {
         if (CensusDAOMap == null || CensusDAOMap.size() == 0) {
@@ -57,10 +47,12 @@ public class CensusAnalyser {
             throw new CensusAnalyserException("NO_CENSUS_DATA",
                     CensusAnalyserException.ExceptionType.INCORRECT_FILE_DATA);
         }
-       List <CensusDAO> sortedList = CensusDAOMap.values().stream().collect(Collectors.toList());
-       Comparator<CensusDAO> codeComparator = (o1, o2) -> ((o1.population - (o2.population)) > 0) ? -1 : 1;
-       Collections.sort(sortedList, codeComparator);
-        String jsonString = new Gson().toJson(sortedList);
+
+       List codeCensusList=CensusDAOMap.values().stream()
+               .sorted((data1,data2)->data1.StateCode.compareTo(data2.StateCode))
+                 .map(censusDAO -> censusDAO.getCensusDTO(country))
+                 .collect(Collectors.toList());
+        String jsonString = new Gson().toJson(codeCensusList);
         return jsonString;
    }
 

@@ -4,6 +4,10 @@ import com.opencsv.bean.CsvBindByName;
 
 public class USCensusCSV extends CensusAnalyser{
 
+    public USCensusCSV() {
+
+    }
+
     @CsvBindByName(column = "State_Id", required = true)
     public String State_Id;
 
@@ -30,6 +34,10 @@ public class USCensusCSV extends CensusAnalyser{
 
     @CsvBindByName(column = "Housing_Density", required = true)
     public double Housing_Density;
+
+    public USCensusCSV(String stateCode, int population, double population_density, double total_area) {
+       // super();
+    }
 
     @Override
     public String toString() {
